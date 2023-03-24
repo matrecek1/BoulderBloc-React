@@ -30,7 +30,7 @@ function Gym({ gym }: { gym: IGym }) {
                     <Card.Subtitle>Not Rated</Card.Subtitle>
                 )}
                 <Card.Text>{gym.description}</Card.Text>
-                <LinkContainer to={`/${gym._id}`}>
+                <LinkContainer to={`/gyms/${gym._id}`}>
                     <Card.Link className="btn btn-warning">
                         See Walls!
                     </Card.Link>

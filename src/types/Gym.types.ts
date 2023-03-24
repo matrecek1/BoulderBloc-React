@@ -25,10 +25,8 @@ export type Grade = "5" | "5A" | "5A+" | "5B" | '5B+' | "5C" | "5C+" | "6A" |
     "8A" | "8A+" | "8B" | '8B+' | "8C" | "8C+"
 
 interface Gradeable {
-    grade:{
         activeGrade:Grade;
         proposeGrades:Grade[]
-    }
 }
 
 export interface IBoulder {

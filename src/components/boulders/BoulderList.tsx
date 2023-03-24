@@ -17,7 +17,7 @@ function BoulderList() {
                     );
                 })
             ) : (
-                <h3>No walls</h3>
+                <h3>No Boulders</h3>
             )}
         </>
     );

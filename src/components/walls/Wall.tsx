@@ -14,7 +14,7 @@ function Wall({wall} : {wall:IWall}){
                 <Card.Title>{wall.name}</Card.Title>
                 <Card.Text>{wall.description}</Card.Text>
                 <Card.Text>{wall.angle}°</Card.Text>
-                <LinkContainer to={`${wall._id}`}>
+                <LinkContainer to={`walls/${wall._id}`}>
                     <Card.Link className="btn btn-warning">
                         See Boulders!
                     </Card.Link>

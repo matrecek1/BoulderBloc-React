@@ -7,7 +7,7 @@ function Root() {
     return (
         <>
             <MainNav />
-            <Container fluid>
+            <Container fluid className="mt-3 mx-auto" style={{width:"100%"}}>
                 <Row>
                     <Col bg="dark" sm={2}>
                     </Col>
