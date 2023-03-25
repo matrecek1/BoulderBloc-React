@@ -1,7 +1,12 @@
 import Stack from "react-bootstrap/Stack";
 import Button from "react-bootstrap/Button";
+import { AiOutlineLeft, AiOutlineRight } from "react-icons/ai";
+import { useLoaderData, useRouteLoaderData } from "react-router-dom";
 
-const BoulderFooter: React.FC<{}> = () => {
+
+const BoulderFooter: React.FC<{boulderId:string}> = ({boulderId}) => {
+    const boulders = useRouteLoaderData("wallIndex")
+    console.log(boulders);
     return (
         <>
             <Stack
@@ -10,9 +15,9 @@ const BoulderFooter: React.FC<{}> = () => {
                 gap={3}>
                 <Button
                     variant="outline-light"
-                    size="lg"
-                    className="ms-3">
-                    Rate
+                    className="ms-4 me-auto"
+                    style={{ height: "45px", width: "45px" }}>
+                    <AiOutlineLeft className="fs-1 w-100 my-auto mx-auto" />
                 </Button>
                 <Button
                     variant="outline-light"
@@ -22,9 +27,9 @@ const BoulderFooter: React.FC<{}> = () => {
                 </Button>
                 <Button
                     variant="outline-light"
-                    size="lg"
-                    className="me-3">
-                    Rate
+                    className="ms-auto me-4"
+                    style={{ height: "45px", width: "45px" }}>
+                    <AiOutlineRight className="fs-1 w-100 my-auto mx-auto" />
                 </Button>
             </Stack>
         </>

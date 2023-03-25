@@ -8,7 +8,6 @@ import BoulderFooter from "../../components/boulders/BoulderFooter";
 
 function BoulderDetail() {
     const boulder = useLoaderData() as IBoulder
-    console.log(boulder.imgUrl);
     return (
         <>
             <div className="d-flex flex-column h-100 w-100">
@@ -23,7 +22,7 @@ function BoulderDetail() {
                         alt="..."
                     />
                 </Container>
-                <BoulderFooter/>
+                <BoulderFooter boulderId={boulder._id}/>
             </div>
         </>
     );

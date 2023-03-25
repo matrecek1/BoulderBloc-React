@@ -14,7 +14,7 @@ const BoulderNav: React.FC<{ header: string, grade:Grade     }> = ({header, grad
         <>
             <Navbar
                 bg="danger"
-                className="border-bottom border-dark border-1"
+                className=""
             >
                 <Container className="row w-100 px-0 mx-0">
                     <Nav className="col-4">
