@@ -1,9 +1,9 @@
-import { useLoaderData } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 import { IGym } from "../../types/Gym.types";
 import Wall from "./Wall";
 
 function WallList() {
-    const gym = useLoaderData() as IGym;
+    const gym = useRouteLoaderData("gymIndex") as IGym;
     return (
         <>
             {gym.walls && gym.walls.length > 0 ? (

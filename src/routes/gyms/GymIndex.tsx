@@ -1,33 +1,17 @@
-import { useLoaderData, useLocation, useParams } from "react-router-dom";
+import { useRouteLoaderData, useLocation, useParams } from "react-router-dom";
 import axios from "axios";
 import { IGym } from "../../types/Gym.types";
 import ReactStars from "react-stars";
 import WallList from "../../components/walls/WallList";
+import Root from "../Root";
+import MainNav from "../../components/MainNav";
 
 function GymIndex() {
-    const gym = useLoaderData() as IGym;
+    const gym = useRouteLoaderData("gymIndex") as IGym;
     return (
         <>
-            <div>
-                <h3 className="w-100 text-center mt-1">{gym.name}</h3>
-                <div
-                    className="mx-auto"
-                    style={{ width: "fit-content" }}
-                >
-                    <ReactStars
-                        count={5}
-                        value={
-                            gym.rating.averageRating !== "Not Rated"
-                                ? gym.rating.averageRating
-                                : 0
-                        }
-                        edit={false}
-                        size={24}
-                        color2={"#ffd700"}
-                    />
-                </div>
-            </div>
-            <WallList />
+        <MainNav header={gym.name} rating={gym.rating.averageRating}/>
+        <Root Content={WallList}/>
         </>
     );
 }

@@ -1,10 +1,11 @@
-import { useLoaderData } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 import { IGym, IWall } from "../../types/Gym.types";
 import Boulder from "./Boulder";
 
 
 function BoulderList() {
-    const wall = useLoaderData() as IWall;
+    const wall = useRouteLoaderData("wallIndex") as IWall;
+    console.log(wall);
     return (
         <>
             {wall.boulders && wall.boulders.length > 0 ? (

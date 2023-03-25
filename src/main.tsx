@@ -1,41 +1,55 @@
 import React, { Children } from "react";
 import ReactDOM from "react-dom/client";
-import { createBrowserRouter, Link, Outlet, RouterProvider } from "react-router-dom";
+import {
+    createBrowserRouter,
+    Link,
+    Outlet,
+    RouterProvider,
+} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Root from "./routes/Root";
 import Gyms, { loader as gymsLoader } from "./routes/gyms/Gyms";
 import GymIndex, { loader as gymIndexLoader } from "./routes/gyms/GymIndex";
-import WallIndex, { loader as wallIndexLoader } from "./components/walls/WallIndex";
-import BoulderDetail, {loader as boulderIndexLoader} from "./routes/boulders/BoulderDetail";
-import BoulderNav from "./components/boulders/BoulderNav";
+import WallIndex, {
+    loader as wallIndexLoader,
+} from "./components/walls/WallIndex";
+import BoulderDetail, {
+    loader as boulderIndexLoader,
+} from "./routes/boulders/BoulderDetail";
 
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <Root />,
         children: [
             {
                 path: "/gyms",
-                element: <Gyms />,
+                id: "gyms",
                 loader: gymsLoader,
-            },
-            {
-                path: "/gyms/:gymId",
-                element: <GymIndex />,
-                loader: gymIndexLoader,
-            },
-            {
-                path: "/gyms/:gymId/walls/:wallId",
-                element: <WallIndex />,
-                id: "wallIndex",
-                loader: wallIndexLoader,
+                children: [
+                    { index: true, element: <Gyms /> },
+                    {
+                        path: "/gyms/:gymId",
+                        id: "gymIndex",
+                        loader: gymIndexLoader,
+                        children: [
+                            { index: true, element: <GymIndex /> },
+                            {
+                                path: "/gyms/:gymId/walls/:wallId",
+                                id: "wallIndex",
+                                loader: wallIndexLoader,
+                                children: [
+                                    { index: true, element: <WallIndex /> },
+                                    {
+                                        path: "/gyms/:gymId/walls/:wallId/boulders/:boulderId",
+                                        element: <BoulderDetail />,
+                                        loader: boulderIndexLoader,
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
             },
         ],
-    },
-    {
-        path: "/gyms/:gymId/walls/:wallId/boulders/:boulderId",
-        element: <BoulderDetail />,
-        loader: boulderIndexLoader,
     },
 ]);
 

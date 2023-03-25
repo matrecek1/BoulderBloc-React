@@ -1,9 +1,9 @@
-import { useLoaderData } from "react-router-dom";
+import { useRouteLoaderData } from "react-router-dom";
 import Gym from "./Gym";
 import { IGym } from "../../types/Gym.types";
 
 function GymList() {
-    const gyms = useLoaderData() as IGym[];
+    const gyms = useRouteLoaderData("gyms") as IGym[];
     return (
         <>
             {gyms.map((gym) => {
