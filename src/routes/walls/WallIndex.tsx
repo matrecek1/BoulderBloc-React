@@ -1,7 +1,7 @@
 import axios from "axios";
-import BoulderList from "../boulders/BoulderList";
-import Root from "../../routes/Root";
-import MainNav from "../MainNav";
+import BoulderList from "../../components/boulders/BoulderList";
+import Root from "../../components/Root";
+import MainNav from "../../components/MainNav";
 import { useRouteLoaderData } from "react-router-dom";
 import { IWall } from "../../types/Gym.types";
 

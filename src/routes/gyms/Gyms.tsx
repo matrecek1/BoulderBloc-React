@@ -1,15 +1,16 @@
-import { useRouteLoaderData } from "react-router-dom";
 import GymList from "../../components/gyms/GymList";
 import axios from "axios";
-import Root from "../Root";
+import Root from "../../components/Root";
 import MainNav from "../../components/MainNav";
-
 
 function Gyms({}) {
     return (
         <>
-        <MainNav  header={null} rating={null} />
-            <Root Content={GymList}/>
+            <MainNav
+                header={null}
+                rating={null}
+            />
+            <Root Content={GymList} />
         </>
     );
 }

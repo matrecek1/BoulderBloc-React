@@ -3,15 +3,18 @@ import axios from "axios";
 import { IGym } from "../../types/Gym.types";
 import ReactStars from "react-stars";
 import WallList from "../../components/walls/WallList";
-import Root from "../Root";
+import Root from "../../components/Root";
 import MainNav from "../../components/MainNav";
 
 function GymIndex() {
     const gym = useRouteLoaderData("gymIndex") as IGym;
     return (
         <>
-        <MainNav header={gym.name} rating={gym.rating.averageRating}/>
-        <Root Content={WallList}/>
+            <MainNav
+                header={gym.name}
+                rating={gym.rating.averageRating}
+            />
+            <Root Content={WallList} />
         </>
     );
 }
