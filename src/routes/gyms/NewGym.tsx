@@ -93,24 +93,19 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const values = Object.fromEntries(formData);
     try {
-        axios.post("http://localhost:3000/gyms", values)
-        .then((response) =>{
-            //Maybe flash message with respnose?
-        })
-        .catch((error) =>{
-            const errorResponse = error.response;
-            const errorMessage = errorResponse.data.error;
-            const statusCode = errorResponse.status;
-            if (statusCode === 400) {
-                throw json({message:"Error: Bad Request"},{status:400});
-            } else if (statusCode === 401) {
-                throw json({message:`Error: Unauthorized`}, {status: 401});
-            } else {
-                throw json({message: `${errorMessage}`});
-            }
-        })
+        const response = await axios.post("http://localhost:3000/gyms", values)
     } catch (error) {
-        throw json({message:"Error: Failed to create Gym."})
+        if (axios.isAxiosError(error)) {
+            const {message} = error;
+            const {status} = error
+            if (status === 400) {
+                throw json({ message: "Error: Bad Request" }, { status: 400 });
+            } else {
+                throw json({ message: `${message}` }, {status});
+            }
+        } else {
+            throw json({message: "Encountered unexpected error!", error})
+        }
     }
     return redirect('/gyms')
 };

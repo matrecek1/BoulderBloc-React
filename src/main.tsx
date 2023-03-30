@@ -10,6 +10,7 @@ import BoulderDetail, {
 } from "./routes/boulders/BoulderDetail";
 import NewGym, { action as newGymAction } from "./routes/gyms/NewGym";
 import NewWall, { action as newWallAction } from "./routes/walls/NewWall";
+import NewBoulder, { action as newBoulderAction } from "./routes/boulders/NewBoulder";
 
 const router = createBrowserRouter([
     {
@@ -43,6 +44,11 @@ const router = createBrowserRouter([
                                 loader: wallIndexLoader,
                                 children: [
                                     { index: true, element: <WallIndex /> },
+                                    {
+                                        path: "/gyms/:gymId/walls/:wallId/boulders/newBoulder",
+                                        element: <NewBoulder />,
+                                        action: newBoulderAction,
+                                    },
                                     {
                                         path: "/gyms/:gymId/walls/:wallId/boulders/:boulderId",
                                         element: <BoulderDetail />,
