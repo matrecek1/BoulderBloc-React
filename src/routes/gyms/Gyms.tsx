@@ -2,7 +2,7 @@ import GymList from "../../components/gyms/GymList";
 import axios, { AxiosError } from "axios";
 import Root from "../../components/Root";
 import MainNav from "../../components/MainNav";
-import { json } from "react-router-dom";
+import { ActionFunctionArgs, json } from "react-router-dom";
 
 function Gyms({}) {
     return (
@@ -33,4 +33,6 @@ export async function loader() {
         }
     }
 }
+
+
 export default Gyms;

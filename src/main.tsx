@@ -12,6 +12,7 @@ import NewGym, { action as newGymAction } from "./routes/gyms/NewGym";
 import NewWall, { action as newWallAction } from "./routes/walls/NewWall";
 import NewBoulder, { action as newBoulderAction } from "./routes/boulders/NewBoulder";
 import MainErrorElement from "./routes/MainErrorElement";
+import { rateGymAction } from "./routes/gyms/features/rateGymAction";
 
 const router = createBrowserRouter([
     {
@@ -35,6 +36,7 @@ const router = createBrowserRouter([
                         loader: gymIndexLoader,
                         children: [
                             { index: true, element: <GymIndex /> },
+                            { path: "gymRating", action: rateGymAction },
                             {
                                 path: "walls/newWall",
                                 element: <NewWall />,

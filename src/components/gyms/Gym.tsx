@@ -1,16 +1,17 @@
 import { LinkContainer } from "react-router-bootstrap";
 import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button"
 import { IGym } from "../../types/Gym.types";
 import ReactStars from "react-stars";
 
-function Gym({ gym }: { gym: IGym }) {
+function Gym({ gym, showRatingModal }: { gym: IGym, showRatingModal:any }) {
     return (
         <Card
             bg="danger"
             text="white"
             className="mb-2"
         >
-            <Card.Body className="text-center">
+            <Card.Body className="text-center" id={gym._id}>
                 <Card.Title>{gym.name}</Card.Title>
                 {gym.rating.averageRating !== "Not Rated" ? (
                     <Card.Subtitle
@@ -34,9 +35,7 @@ function Gym({ gym }: { gym: IGym }) {
                         See Walls!
                     </Card.Link>
                 </LinkContainer>
-                <LinkContainer to={"/gyms"}>
-                    <Card.Link className="btn btn-warning">Rate!</Card.Link>
-                </LinkContainer>
+                    <Button variant="warning" className="ms-4" onClick={showRatingModal}>Rate!</Button>
             </Card.Body>
         </Card>
     );
