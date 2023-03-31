@@ -9,7 +9,7 @@ function BoulderList() {
     return (
         <>
             <Link
-                to={"newGym"}
+                to={"boulders/newBoulder"}
                 className="btn btn-danger w-100 mb-3 fs-3">
                 New Boulder
             </Link>

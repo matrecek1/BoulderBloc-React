@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useLoaderData } from "react-router-dom";
+import { json, useLoaderData } from "react-router-dom";
 import { IBoulder } from "../../types/Gym.types";
 import { Container } from "react-bootstrap";
 import Image from "react-bootstrap/Image"
@@ -36,8 +36,17 @@ export async function loader({ params }: any) {
             `http://localhost:3000/gyms/${params.gymId}/walls/${params.wallId}/boulders/${params.boulderId}`
         );
         return data;
-    } catch (err) {
-        console.log(err);
-        throw new Error("error");
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            const { message } = error;
+            const { status } = error;
+            if (status === 400) {
+                throw json({ statusText: "Error: Bad Request" }, { status });
+            } else {
+                throw json({ statusText: `${message}` }, { status });
+            }
+        } else {
+            throw json({ statusText: "Encountered unexpected error!", error });
+        }
     }
 }

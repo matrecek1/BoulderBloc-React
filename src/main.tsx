@@ -11,10 +11,12 @@ import BoulderDetail, {
 import NewGym, { action as newGymAction } from "./routes/gyms/NewGym";
 import NewWall, { action as newWallAction } from "./routes/walls/NewWall";
 import NewBoulder, { action as newBoulderAction } from "./routes/boulders/NewBoulder";
+import MainErrorElement from "./routes/MainErrorElement";
 
 const router = createBrowserRouter([
     {
         path: "/",
+        errorElement: <MainErrorElement />,
         children: [
             {
                 path: "/gyms",

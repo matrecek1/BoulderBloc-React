@@ -4,7 +4,6 @@ import { IGym } from "../../types/Gym.types";
 import ReactStars from "react-stars";
 
 function Gym({ gym }: { gym: IGym }) {
-    console.log(gym);
     return (
         <Card
             bg="danger"

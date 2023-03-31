@@ -1,4 +1,4 @@
-import { useRouteLoaderData, useLocation, useParams } from "react-router-dom";
+import { useRouteLoaderData, useLocation, useParams, json } from "react-router-dom";
 import axios from "axios";
 import { IGym } from "../../types/Gym.types";
 import ReactStars from "react-stars";
@@ -20,13 +20,20 @@ function GymIndex() {
 }
 export async function loader({ params }: any) {
     try {
-        const { data } = await axios.get(
-            "http://localhost:3000/gyms/" + params.gymId
-        );
+        const { data } = await axios.get("http://localhost:3000/gyms/" + params.gymId);
         return data.gym;
-    } catch (err) {
-        console.log(err);
-        throw new Error("error");
+    } catch (error) {
+        if (axios.isAxiosError(error)) {
+            const { message } = error;
+            const { status } = error;
+            if (status === 400) {
+                throw json({ statusText: "Error: Bad Request" }, { status });
+            } else {
+                throw json({ statusText: `${message}` }, { status });
+            }
+        } else {
+            throw json({ statusText: "Encountered unexpected error!", error });
+        }
     }
 }
 

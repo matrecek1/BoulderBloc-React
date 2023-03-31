@@ -116,31 +116,26 @@ const NewWall: React.FC = () => {
 export const action = async ({ request, params }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const values = Object.fromEntries(formData);
-    console.log(values);
-    console.log('params :>> ', params);
     try {
-        axios
-            .post(`http://localhost:3000/gyms/${params.gymId}/walls`, values)
-            .then((response) => {
-                console.log(response.data.savedWall);
-                //Maybe flash message with respnose?
-            })
-            .catch((error) => {
-                const errorResponse = error.response;
-                const errorMessage = errorResponse.data.error;
-                const statusCode = errorResponse.status;
-                if (statusCode === 400) {
-                    throw json({ message: "Error: Bad Request" }, { status: 400 });
-                } else if (statusCode === 401) {
-                    throw json({ message: `Error: Unauthorized` }, { status: 401 });
-                } else {
-                    throw json({ message: `${errorMessage}` });
-                }
-            });
+        console.log(values);
+        const response = await axios.post(
+          `http://localhost:3000/gyms/${params.gymId}/walls`,
+          values
+        );
     } catch (error) {
-        throw json({ message: "Error: Failed to create Wall." });
+        if (axios.isAxiosError(error)) {
+            const { message } = error;
+            const { status } = error;
+            if (status === 400) {
+                throw json({ statusText: "Error: Bad Request" }, { status});
+            } else {
+                throw json({ statusText: `${message}` }, { status });
+            }
+        } else {
+            throw json({ statusText: "Encountered unexpected error!", error });
+        }
     }
-    return redirect(`/gyms/${params.gymId}/walls`);
+    return redirect(`/gyms/${params.gymId}`);
 };
 
 export default NewWall;

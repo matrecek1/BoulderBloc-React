@@ -1,11 +1,13 @@
 import axios from "axios";
-import { useFormik} from "formik";
-import { Container, Form} from "react-bootstrap";
+import { useFormik, Formik, Field, ErrorMessage } from "formik";
+import { Button, Container, Form } from "react-bootstrap";
 import {
     ActionFunctionArgs,
     json,
     redirect,
+    useNavigate,
     useNavigation,
+    useParams,
     useSubmit,
 } from "react-router-dom";
 import MainNav from "../../components/MainNav";
@@ -13,22 +15,73 @@ import WideButton from "../../components/WideButton";
 import WideButtonSubmiting from "../../components/WideButtonSubmiting";
 import { newBoulderSchema } from "../../schemas/formValidationSchemas";
 import { grades } from "../../types/Gym.types";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const NewBoulder: React.FC = () => {
-    const submit = useSubmit();
-    const formik = useFormik({
-        initialValues: {
-            name: "",
-            description: "",
-            image: "",
-            bGrade: "7A",
-        },
-        validationSchema: newBoulderSchema,
-        onSubmit: (values) => {
-            console.log(values);
-            return submit({image:values.image}, {method:"post"})
-        },
-    });
+    const navigate = useNavigate();
+    const { gymId, wallId } = useParams();
+
+    const [file, setFile] = useState(null);
+    const [invalidFile, setInvalidFile] = useState(false)
+    const [submitting, setSubmitting] = useState(false)
+
+    type FormData = yup.InferType<typeof newBoulderSchema>;
+    
+    const {
+        register,
+        handleSubmit,
+        trigger,
+        formState: { errors },
+    } = useForm<FormData>({ resolver: yupResolver(newBoulderSchema) });
+
+    const handleFileUpload = (event: any) => {
+        if (event.target.files[0].size > 3000000) {
+            setInvalidFile(true);
+            event.target.value = null
+        } else {
+            setInvalidFile(false)
+            setFile(event.target.files[0]);
+        }
+    };
+
+    const onSubmit = async (data: any) => {
+        const formData = new FormData();
+        formData.append("name", data.name);
+        formData.append("description", data.description);
+        formData.append("bGrade", data.bGrade);
+        formData.append("image", file!);
+        try {
+            setSubmitting(true)
+            setTimeout(async() => {
+                const response = await axios.post(
+                    `http://localhost:3000/gyms/${gymId}/walls/${wallId}/boulders`,
+                    formData
+                );
+                setSubmitting(false)
+                navigate(`/gyms/${gymId}/walls/${wallId}`);
+            }, 1000);
+        } catch (error) {
+            if (axios.isAxiosError(error)) {
+                const { message } = error;
+                const { status } = error;
+                if (status === 400) {
+                    throw json({ message: "Error: Bad Request" }, { status: 400 });
+                } else {
+                    throw json({ message: `${message}` }, { status });
+                }
+            } else {
+                throw json({ message: "Encountered unexpected error!", error });
+            }
+        }
+    };
+
+    const handleBlur = (event: React.FocusEvent<HTMLInputElement>) => {
+        trigger(event.target.name as keyof FormData);
+    };
+
     return (
         <>
             <MainNav
@@ -37,101 +90,88 @@ const NewBoulder: React.FC = () => {
             />
             <Container
                 fluid
-                className="w-100 h-100 mx-auto">
-                <Form
-                    onSubmit={formik.handleSubmit}
+                className="my-3 w-100 h-100">
+                <form
+                    onSubmit={handleSubmit(onSubmit)}
                     encType="multipart/form-data"
-                    noValidate>
-                    <Form.Group
-                        className="mb-3 mt-3"
-                        controlId="boulderForm.name">
-                        <Form.Label>Name</Form.Label>
-                        <Form.Control
-                            className="form-control"
-                            type="text"
-                            name="name"
-                            onChange={formik.handleChange}
-                            value={formik.values.name}
-                            onBlur={formik.handleBlur}
-                            isInvalid={formik.touched.name && !!formik.errors.name}
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {formik.errors.name}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group
-                        className="mb-3"
-                        controlId="boulderForm.description">
-                        <Form.Label>description</Form.Label>
-                        <Form.Control
-                            className="form-control"
-                            type="text"
-                            name="description"
-                            onChange={formik.handleChange}
-                            value={formik.values.description}
-                            onBlur={formik.handleBlur}
-                            isInvalid={
-                                formik.touched.description && !!formik.errors.description
-                            }
-                        />
-                        <Form.Control.Feedback type="invalid">
-                            {formik.errors.description}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                    <Form.Group
-                        className="mb-3"
-                        controlId="boulderForm.bGrade">
-                        <Form.Label>Choose boulder grade:</Form.Label>
-                        <Form.Select
-                            className={
-                                formik.touched.bGrade && formik.errors.bGrade
-                                    ? "form-select is-invalid"
-                                    : "form-select"
-                            }
-                            id="bGrade"
-                            name="bGrade"
-                            onChange={formik.handleChange}
-                            onBlur={formik.handleBlur}
-                            isInvalid={formik.touched.bGrade && !!formik.errors.bGrade}
-                            value={formik.values.bGrade}>
-                            {grades.map((grade) => {
-                                return (
-                                    <option
-                                        key={grade}
-                                        value={grade}>
-                                        {grade}
-                                    </option>
-                                );
-                            })}
-                        </Form.Select>
-                        <Form.Control.Feedback type="invalid">
-                            {formik.errors.bGrade}
-                        </Form.Control.Feedback>
-                    </Form.Group>
-                    <div className="mb-3">
-                        <label className="form-label">Choose boulder image:</label>
+                    method="post">
+                    <div>
+                        <label
+                            className="form-label"
+                            htmlFor="name">
+                            Boulder name:
+                        </label>
                         <input
-                            type="file"
-                            name="image"
-                            accept="image/*"
-                            className={`form-control  ${
-                                formik.touched.image && formik.errors.image
-                                    ? "is-invalid"
-                                    : ""
+                            className={`form-control ${
+                                errors.name?.message ? "is-invalid" : ""
                             }`}
-                            onBlur={formik.handleBlur}
-                            onChange={(e) => {
-                                formik.setFieldValue("image", e.currentTarget.files![0]);
-                            }}
+                            type="text"
+                            id="name"
+                            autoComplete="off"
+                            {...register("name", { required: true })}
+                            onBlur={handleBlur}
                         />
-                        {formik.touched.image && formik.errors.image ? (
-                            <Form.Control.Feedback type="invalid">
-                                {formik.errors.image}
-                            </Form.Control.Feedback>
-                        ) : null}
+                        <div className="invalid-feedback">{errors.name?.message}</div>
                     </div>
-                    <WideButton text="Submit" />
-                </Form>
+                    <div>
+                        <label
+                            className="form-label"
+                            htmlFor="description">
+                            Write description:
+                        </label>
+                        <input
+                            className={`form-control ${
+                                errors.name?.message ? "is-invalid" : ""
+                            }`}
+                            type="text"
+                            id="description"
+                            autoComplete="off"
+                            {...register("description", { required: true })}
+                            onBlur={handleBlur}
+                        />
+                        <div className="invalid-feedback">
+                            {errors.description?.message}
+                        </div>
+                    </div>
+                    <div>
+                        <label
+                            className="form-label"
+                            htmlFor="bGrade">
+                            Choose grade:
+                        </label>
+                        <input
+                            className={`form-control ${
+                                errors.bGrade?.message ? "is-invalid" : ""
+                            }`}
+                            type="text"
+                            id="bGrade"
+                            autoComplete="off"
+                            {...register("bGrade", { required: true })}
+                            onBlur={handleBlur}
+                        />
+                        <div className="invalid-feedback">{errors.bGrade?.message}</div>
+                    </div>
+                    <div className="mb-3">
+                        <label
+                            className="form-label"
+                            htmlFor="file">
+                            Choose image:
+                        </label>
+                        <input
+                            className={`form-control ${invalidFile ? "is-invalid" : ""}`}
+                            type="file"
+                            id="file"
+                            onChange={handleFileUpload}
+                            required
+                        />
+                        <div className="invalid-feedback">File is to large! Maximum is 3 mb.</div>
+                    </div>
+                    {submitting ? (
+                        <WideButtonSubmiting text="Submitting.." />
+                    ) : (
+                        <WideButton text="Submit" />
+                    )}
+                </form>
             </Container>
         </>
     );
@@ -150,12 +190,12 @@ export const action = async ({ request, params }: ActionFunctionArgs) => {
             const { message } = error;
             const { status } = error;
             if (status === 400) {
-                throw json({ message: "Error: Bad Request" }, { status: 400 });
+                throw json({ statusText: "Error: Bad Request" }, { status});
             } else {
-                throw json({ message: `${message}` }, { status });
+                throw json({ statusText: `${message}` }, { status });
             }
         } else {
-            throw json({ message: "Encountered unexpected error!", error });
+            throw json({ statusText: "Encountered unexpected error!", error });
         }
     }
     return redirect(`/gyms/${params.gymId}/walls/${params.wallId}`);

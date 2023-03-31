@@ -24,6 +24,5 @@ export const newBoulderSchema = Yup.object().shape({
         .max(30, 'Too Long!')
         .required('Required'),
     description: Yup.string().min(4, 'Too Short!').max(200, "Too Long!").required('Required'),
-    bGrade: Yup.string().oneOf(grades, "Incorrect grade use only font grades!").required("Required!"),
-    image: Yup.mixed().required("Required!")
+    bGrade: Yup.string().oneOf(grades, "Incorrect grade!").required("Required!"),
 });

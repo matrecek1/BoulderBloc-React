@@ -93,18 +93,18 @@ export const action = async ({ request }: ActionFunctionArgs) => {
     const formData = await request.formData();
     const values = Object.fromEntries(formData);
     try {
-        const response = await axios.post("http://localhost:3000/gyms", values)
+        const response = await axios.post("http://localhost:3000/gyms", values);
     } catch (error) {
         if (axios.isAxiosError(error)) {
-            const {message} = error;
-            const {status} = error
+            const { message } = error;
+            const { status } = error;
             if (status === 400) {
-                throw json({ message: "Error: Bad Request" }, { status: 400 });
+                throw json({ statusText: "Error: Bad Request" }, { status });
             } else {
-                throw json({ message: `${message}` }, {status});
+                throw json({ statusText: `${message}` }, { status });
             }
         } else {
-            throw json({message: "Encountered unexpected error!", error})
+            throw json({ statusText: "Encountered unexpected error!", error });
         }
     }
     return redirect('/gyms')
