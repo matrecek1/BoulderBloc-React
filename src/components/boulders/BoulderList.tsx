@@ -5,7 +5,6 @@ import Boulder from "./Boulder";
 
 function BoulderList() {
     const wall = useRouteLoaderData("wallIndex") as IWall;
-    console.log(wall);
     return (
         <>
             <Link

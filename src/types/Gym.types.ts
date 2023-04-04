@@ -43,3 +43,5 @@ export interface IBoulder {
     imgUrl:string;
 }
 
+export type RatingSubmissionState = "submitting" | "submitted" | "idle" | "failedSubmit";
+

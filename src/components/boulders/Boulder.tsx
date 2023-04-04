@@ -13,12 +13,9 @@ function Boulder({ boulder }: { boulder: IBoulder }) {
                 <Card.Title className="fs-2">{boulder.name}</Card.Title>
                 <Card.Text className="fs-3">{boulder.grade.activeGrade}</Card.Text>
                 <LinkContainer to={`boulders/${boulder._id}`}>
-                    <Card.Link className="btn btn-warning">
+                    <Card.Link className="btn btn-warning w-75">
                         See Boulder!
                     </Card.Link>
-                </LinkContainer>
-                <LinkContainer to={"/gyms"}>
-                    <Card.Link className="btn btn-warning">Rate!</Card.Link>
                 </LinkContainer>
             </Card.Body>
         </Card>
