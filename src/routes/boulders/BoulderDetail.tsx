@@ -5,12 +5,17 @@ import { Container } from "react-bootstrap";
 import Image from "react-bootstrap/Image"
 import BoulderNav from "../../components/boulders/BoulderNav";
 import BoulderFooter from "../../components/boulders/BoulderFooter";
+import SentBoulderModal from "../../components/boulders/SentBoulderModal";
 
 function BoulderDetail() {
     const boulder = useLoaderData() as IBoulder
+    const handleCloseModal = () => {
+        console.log("close modal");
+    }
     return (
         <>
             <div className="d-flex flex-column h-100 w-100">
+                <SentBoulderModal closeModal={handleCloseModal}/>
                 <BoulderNav
                     header={boulder.name}
                     grade={boulder.grade.activeGrade}
