@@ -5,7 +5,7 @@ import { useLoaderData, useNavigate, useRouteLoaderData } from "react-router-dom
 import styles from "./BoulderFooter.module.css";
 import { IWall } from "../../types/Gym.types";
 
-const BoulderFooter: React.FC<{ boulderId: string }> = ({ boulderId }) => {
+const BoulderFooter: React.FC<{ boulderId: string, openSentModal:any }> = ({ boulderId, openSentModal }) => {
     const navigate = useNavigate();
     const { boulders } = useRouteLoaderData("wallIndex") as IWall;
 
@@ -42,6 +42,7 @@ const BoulderFooter: React.FC<{ boulderId: string }> = ({ boulderId }) => {
                 <Button
                     variant="outline-light"
                     size="lg"
+                    onClick={openSentModal}
                     className="mx-auto">
                     Sent It!
                 </Button>

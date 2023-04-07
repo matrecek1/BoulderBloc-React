@@ -7,13 +7,14 @@ import GymIndex, { loader as gymIndexLoader } from "./routes/gyms/GymIndex";
 import WallIndex, { loader as wallIndexLoader } from "./routes/walls/WallIndex";
 import BoulderDetail, {
     loader as boulderIndexLoader,
+    action as sentBoulderAction
 } from "./routes/boulders/BoulderDetail";
 import NewGym, { action as newGymAction } from "./routes/gyms/NewGym";
 import NewWall, { action as newWallAction } from "./routes/walls/NewWall";
 import NewBoulder, { action as newBoulderAction } from "./routes/boulders/NewBoulder";
 import MainErrorElement from "./routes/MainErrorElement";
-import { rateGymAction } from "./routes/gyms/features/rateGymAction";
-import { rateWallAction } from "./routes/gyms/features/rateWallAction";
+import { rateGymAction } from "./routes/features/rateGymAction";
+import { rateWallAction } from "./routes/features/rateWallAction";
 
 const router = createBrowserRouter([
     {
@@ -59,6 +60,7 @@ const router = createBrowserRouter([
                                         path: "/gyms/:gymId/walls/:wallId/boulders/:boulderId",
                                         element: <BoulderDetail />,
                                         loader: boulderIndexLoader,
+                                        action: sentBoulderAction,
                                     },
                                 ],
                             },
